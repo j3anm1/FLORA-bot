@@ -108,5 +108,5 @@ def send_whatsapp_message(to, message):
     requests.post(WHATSAPP_API_URL, json=payload, headers=headers)
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # Get the port from Render, default to 5000
-    app.run(host="0.0.0.0", port=port, debug=True)
+    port = int(os.environ.get("PORT", 8080))  # Render uses dynamic ports
+    app.run(host="0.0.0.0", port=port)
