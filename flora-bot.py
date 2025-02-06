@@ -21,7 +21,7 @@ def privacy_policy():
     <body>
         <h1>Privacy Policy for Festival Florece</h1>
         <p>Festival Florece does not collect, store, or share any personal data. All interactions are processed in real-time and not retained.</p>
-        <p>For inquiries, contact us at [Your Email Here].</p>
+        <p>For inquiries, contact us at festivalflorece.com.</p>
     </body>
     </html>
     """, 200
