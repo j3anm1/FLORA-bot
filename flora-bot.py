@@ -110,3 +110,16 @@ def send_whatsapp_message(to, message):
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))  # Render uses dynamic ports
     app.run(host="0.0.0.0", port=port)
+
+@app.route("/", methods=['GET'])
+def home():
+    return """
+    <html>
+    <head><title>Festival Florece Assistant</title></head>
+    <body>
+        <h1>Welcome to the Festival Florece Assistant</h1>
+        <p>This is the official assistant for Festival Florece & Premios Florece.</p>
+        <p>For WhatsApp support, message us directly.</p>
+    </body>
+    </html>
+    """, 200
