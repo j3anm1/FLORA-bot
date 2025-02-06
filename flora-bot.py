@@ -8,13 +8,29 @@ WHATSAPP_ACCESS_TOKEN = "EAAJIJSGjDzQBO00QCGUWZCbxyNlXmZBwB950uxbrmZCZBXCY2un4LV
 WHATSAPP_API_URL = f"https://graph.facebook.com/v17.0/{WHATSAPP_PHONE_ID}/messages"
 
 # Webhook Verify Token
-VERIFY_TOKEN = "FLORA420Secret"  # Choose a custom string
+VERIFY_TOKEN = "FestivalFloreceSecret"  # Choose a custom string
+
+app = Flask(__name__)
+
+# Privacy Policy Route
+@app.route('/privacy-policy', methods=['GET'])
+def privacy_policy():
+    return """
+    <html>
+    <head><title>Privacy Policy</title></head>
+    <body>
+        <h1>Privacy Policy for Festival Florece</h1>
+        <p>Festival Florece does not collect, store, or share any personal data. All interactions are processed in real-time and not retained.</p>
+        <p>For inquiries, contact us at [Your Email Here].</p>
+    </body>
+    </html>
+    """, 200
 
 class FLORA:
     def __init__(self):
-        self.name = "FLORA"
-        self.role = "Festival AI Assistant for Festival Florece & Premios Florece"
-        self.personality = "Friendly, energetic, and helpful"
+        self.name = "Festival Florece Assistant"
+        self.role = "Your official assistant for Festival Florece & Premios Florece"
+        self.personality = "Helpful and engaging, providing official festival information"
         self.features = {
             "schedule": "The festival schedule includes various performances, workshops, and ceremonies. Let me know if you're looking for a specific event!",
             "ticketing": "Tickets can be purchased online or at the entrance. There are different categories, including VIP and general admission.",
@@ -46,7 +62,6 @@ class FLORA:
         
         return "I'm here to help! Let me know what you need information on."
 
-app = Flask(__name__)
 flora = FLORA()
 
 @app.route('/query', methods=['GET', 'POST'])
