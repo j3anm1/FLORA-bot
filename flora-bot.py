@@ -1,5 +1,11 @@
 import os
+import requests
 from flask import Flask, request, jsonify
+
+# WhatsApp API Credentials
+WHATSAPP_PHONE_ID = "543517102183346"
+WHATSAPP_ACCESS_TOKEN = "EAAJIJSGjDzQBO00QCGUWZCbxyNlXmZBwB950uxbrmZCZBXCY2un4LVxTRSNp2RGEEQ8C58GYDtprIvl77uZAspKpmNHXwyxcIDaOxqf4Jeda9ACaGrUWLZBPmnMUFZAW9F48jh4EvI9uHQZCKIZBMQBUj472I1ZCQ2SmZAzC0QdZBrx3h1kOFt90bhXl5FPizpr6vNUZC1FcYzLRvbR5R7oux6yB5zRAErYB0rycPMAOe5nQa"
+WHATSAPP_API_URL = f"https://graph.facebook.com/v17.0/{WHATSAPP_PHONE_ID}/messages"
 
 class FLORA:
     def __init__(self):
@@ -50,6 +56,30 @@ def query():
 
     response = flora.handle_query(user_input)
     return jsonify({"response": response})
+
+@app.route('/whatsapp-webhook', methods=['POST'])
+def whatsapp_webhook():
+    data = request.get_json()
+    if "messages" in data.get("entry", [{}])[0].get("changes", [{}])[0].get("value", {}):
+        message = data["entry"][0]["changes"][0]["value"]["messages"][0]
+        sender_number = message["from"]
+        user_text = message["text"]["body"]
+        response_text = flora.handle_query(user_text)
+        send_whatsapp_message(sender_number, response_text)
+    return jsonify({"status": "received"})
+
+def send_whatsapp_message(to, message):
+    headers = {
+        "Authorization": f"Bearer {WHATSAPP_ACCESS_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "messaging_product": "whatsapp",
+        "to": to,
+        "text": {"body": message},
+        "type": "text"
+    }
+    requests.post(WHATSAPP_API_URL, json=payload, headers=headers)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))  # Get the port from Render, default to 5000
