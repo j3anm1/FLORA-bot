@@ -7,6 +7,9 @@ WHATSAPP_PHONE_ID = "543517102183346"
 WHATSAPP_ACCESS_TOKEN = "EAAJIJSGjDzQBO00QCGUWZCbxyNlXmZBwB950uxbrmZCZBXCY2un4LVxTRSNp2RGEEQ8C58GYDtprIvl77uZAspKpmNHXwyxcIDaOxqf4Jeda9ACaGrUWLZBPmnMUFZAW9F48jh4EvI9uHQZCKIZBMQBUj472I1ZCQ2SmZAzC0QdZBrx3h1kOFt90bhXl5FPizpr6vNUZC1FcYzLRvbR5R7oux6yB5zRAErYB0rycPMAOe5nQa"
 WHATSAPP_API_URL = f"https://graph.facebook.com/v17.0/{WHATSAPP_PHONE_ID}/messages"
 
+# Webhook Verify Token
+VERIFY_TOKEN = "FLORA420Secret"  # Choose a custom string
+
 class FLORA:
     def __init__(self):
         self.name = "FLORA"
@@ -57,8 +60,16 @@ def query():
     response = flora.handle_query(user_input)
     return jsonify({"response": response})
 
-@app.route('/whatsapp-webhook', methods=['POST'])
+# WhatsApp Webhook Verification
+@app.route('/whatsapp-webhook', methods=['GET', 'POST'])
 def whatsapp_webhook():
+    if request.method == 'GET':
+        token = request.args.get('hub.verify_token')
+        challenge = request.args.get('hub.challenge')
+        if token == VERIFY_TOKEN:
+            return challenge, 200
+        return "Verification failed", 403
+    
     data = request.get_json()
     if "messages" in data.get("entry", [{}])[0].get("changes", [{}])[0].get("value", {}):
         message = data["entry"][0]["changes"][0]["value"]["messages"][0]
