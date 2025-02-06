@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 
 class FLORA:
@@ -46,9 +47,10 @@ def query():
         user_input = data.get('q', '')
     else:
         user_input = request.args.get('q', '')
-    
+
     response = flora.handle_query(user_input)
     return jsonify({"response": response})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Get the port from Render, default to 5000
+    app.run(host="0.0.0.0", port=port, debug=True)
